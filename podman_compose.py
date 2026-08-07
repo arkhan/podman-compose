@@ -3953,7 +3953,7 @@ def create_format_logs_task(
 
         log_prefix = container["log_prefix"]
         space_suffix = " " * (max_service_length - len(log_prefix) + 1)
-        log_formatter = f"{color}[{log_prefix}]{space_suffix}|\x1b[0m"
+        log_formatter = f"{color}{log_prefix}{space_suffix}|\x1b[0m"
 
     target_service = compose.container_names_by_service[service]
     return asyncio.create_task(
@@ -4320,7 +4320,7 @@ async def compose_up(compose: PodmanCompose, args: argparse.Namespace) -> int | 
         color_idx = i % len(compose.console_colors)
         color = compose.console_colors[color_idx]
         space_suffix = " " * (max_service_length - len(cnt["_service"]) + 1)
-        log_formatter = "{}[{}]{}|\x1b[0m".format(color, cnt["_service"], space_suffix)
+        log_formatter = "{}{}{}|\x1b[0m".format(color, cnt["_service"], space_suffix)
         if cnt["_service"] in excluded:
             log.debug("** skipping: %s", cnt["name"])
             continue
@@ -4742,8 +4742,6 @@ async def compose_logs(compose: PodmanCompose, args: argparse.Namespace) -> None
         podman_args.append("-l")
     if args.names:
         podman_args.append("-n")
-    if not args.no_color:
-        podman_args.append("--color")
     if args.since:
         podman_args.extend(["--since", args.since])
     # the default value is to print all logs which is in podman = 0 and not
@@ -5508,6 +5506,11 @@ def main() -> None:
     except PodmanComposeError as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
+    except KeyboardInterrupt:
+        # asyncio.run() re-raises SIGINT as KeyboardInterrupt after cancelling
+        # the running task; exit quietly instead of dumping a CancelledError
+        # + KeyboardInterrupt traceback (see cpython asyncio.Runner.run()).
+        sys.exit(130)
 
 
 if __name__ == "__main__":

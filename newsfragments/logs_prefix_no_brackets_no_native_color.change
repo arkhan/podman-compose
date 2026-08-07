@@ -1,0 +1,1 @@
+`logs`/`up` service prefixes are now printed as `service_1 | ...` instead of `[service_1] | ...`, and `podman-compose logs` no longer forwards `--color` to `podman logs`; log bodies were being double-colored (podman's own SGR 37 rendering as dim gray in many terminals) on top of podman-compose's own colored prefix.

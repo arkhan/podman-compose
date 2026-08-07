@@ -1,0 +1,1 @@
+`podman-compose` no longer prints a `CancelledError`/`KeyboardInterrupt` traceback when interrupted with Ctrl+C; it now exits quietly with status 130.

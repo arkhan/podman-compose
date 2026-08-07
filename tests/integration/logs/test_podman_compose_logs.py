@@ -18,10 +18,10 @@ class TestLogs(unittest.TestCase, RunSubprocessMixin):
             [],
             [
                 b'',
-                b'\x1b[1;32m[test1_1]|\x1b[0m \x1b[37mtest1\x1b[0m',
-                b'\x1b[1;33m[test2_1]|\x1b[0m \x1b[37mtest2\x1b[0m',
-                b'\x1b[1;34m[test3_1]|\x1b[0m \x1b[37mtest3\x1b[0m',
-                b'\x1b[1;35m[custom_name]|\x1b[0m \x1b[37mtest4\x1b[0m',
+                b'\x1b[1;32mtest1_1|\x1b[0m test1',
+                b'\x1b[1;33mtest2_1|\x1b[0m test2',
+                b'\x1b[1;34mtest3_1|\x1b[0m test3',
+                b'\x1b[1;35mcustom_name|\x1b[0m test4',
             ],
         ),
         (
@@ -29,10 +29,10 @@ class TestLogs(unittest.TestCase, RunSubprocessMixin):
             ["--no-color"],
             [
                 b'',
-                b'\x1b[0m[custom_name]|\x1b[0m test4',
-                b'\x1b[0m[test1_1]|\x1b[0m test1',
-                b'\x1b[0m[test2_1]|\x1b[0m test2',
-                b'\x1b[0m[test3_1]|\x1b[0m test3',
+                b'\x1b[0mcustom_name|\x1b[0m test4',
+                b'\x1b[0mtest1_1|\x1b[0m test1',
+                b'\x1b[0mtest2_1|\x1b[0m test2',
+                b'\x1b[0mtest3_1|\x1b[0m test3',
             ],
         ),
         (
@@ -40,10 +40,10 @@ class TestLogs(unittest.TestCase, RunSubprocessMixin):
             ["--no-log-prefix"],
             [
                 b'',
-                b'\x1b[37mtest1\x1b[0m',
-                b'\x1b[37mtest2\x1b[0m',
-                b'\x1b[37mtest3\x1b[0m',
-                b'\x1b[37mtest4\x1b[0m',
+                b'test1',
+                b'test2',
+                b'test3',
+                b'test4',
             ],
         ),
         (
@@ -54,17 +54,17 @@ class TestLogs(unittest.TestCase, RunSubprocessMixin):
         (
             "one_service_no_flag",
             ["test1"],
-            [b'', b'\x1b[1;32m[test1_1]|\x1b[0m \x1b[37mtest1\x1b[0m'],
+            [b'', b'\x1b[1;32mtest1_1|\x1b[0m test1'],
         ),
         (
             "one_service_flag_no_color",
             ["test1", "--no-color"],
-            [b'', b'\x1b[0m[test1_1]|\x1b[0m test1'],
+            [b'', b'\x1b[0mtest1_1|\x1b[0m test1'],
         ),
         (
             "one_service_flag_no_log_prefix",
             ["test1", "--no-log-prefix"],
-            [b'', b'\x1b[37mtest1\x1b[0m'],
+            [b'', b'test1'],
         ),
         (
             "one_service_flag_no_color_no_log_prefix",
@@ -76,19 +76,19 @@ class TestLogs(unittest.TestCase, RunSubprocessMixin):
             ["test2", "test3"],
             [
                 b'',
-                b'\x1b[1;33m[test2_1]|\x1b[0m \x1b[37mtest2\x1b[0m',
-                b'\x1b[1;34m[test3_1]|\x1b[0m \x1b[37mtest3\x1b[0m',
+                b'\x1b[1;33mtest2_1|\x1b[0m test2',
+                b'\x1b[1;34mtest3_1|\x1b[0m test3',
             ],
         ),
         (
             "two_services_flag_no_color",
             ["test2", "test3", "--no-color"],
-            [b'', b'\x1b[0m[test2_1]|\x1b[0m test2', b'\x1b[0m[test3_1]|\x1b[0m test3'],
+            [b'', b'\x1b[0mtest2_1|\x1b[0m test2', b'\x1b[0mtest3_1|\x1b[0m test3'],
         ),
         (
             "two_services_flag_no_log_prefix",
             ["test2", "test3", "--no-log-prefix"],
-            [b'', b'\x1b[37mtest2\x1b[0m', b'\x1b[37mtest3\x1b[0m'],
+            [b'', b'test2', b'test3'],
         ),
         (
             "two_services_flag_no_color_no_log_prefix",
@@ -100,8 +100,8 @@ class TestLogs(unittest.TestCase, RunSubprocessMixin):
             ["test2", "test4"],
             [
                 b'',
-                b'\x1b[1;33m[test2_1]|\x1b[0m \x1b[37mtest2\x1b[0m',
-                b'\x1b[1;35m[custom_name]|\x1b[0m \x1b[37mtest4\x1b[0m',
+                b'\x1b[1;33mtest2_1|\x1b[0m test2',
+                b'\x1b[1;35mcustom_name|\x1b[0m test4',
             ],
         ),
     ])
@@ -159,9 +159,9 @@ class TestLogs(unittest.TestCase, RunSubprocessMixin):
             self.assertEqual(
                 lines,
                 [
-                    "\x1b[1;32m[test1] |\x1b[0m test1",
-                    "\x1b[1;34m[test3] |\x1b[0m test3",
-                    "\x1b[1;35m[test4] |\x1b[0m test4",
+                    "\x1b[1;32mtest1 |\x1b[0m test1",
+                    "\x1b[1;34mtest3 |\x1b[0m test3",
+                    "\x1b[1;35mtest4 |\x1b[0m test4",
                 ],
             )
         finally:
